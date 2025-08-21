@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amity University Lucknow Campus Interactive Map</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+<body>
+  <header>
+    <img src="icons/amityLogo.jpeg" alt="Amity Logo" class="logo">
+    <h1>Amity University - Lucknow Campus Interactive Map</h1>
+  </header>
+
+  <div class="controls">
+    <input type="text" id="searchBox" placeholder="🔍 Search for a building..." onkeyup="showSuggestions()">
+    <div id="suggestions"></div>
+
+    <label for="source">📍 Starting Point</label>
+    <select id="source"></select>
+
+    <label for="destination">🏁 Destination</label>
+    <select id="destination"></select>
+
+    <button class="btn-primary" onclick="getRoute()">🚶 Get Route</button>
+    <button class="btn-secondary" onclick="recalculateRoute()">🔄 Recalculate Route</button>
+
+    <label for="theme">🎨 Theme:</label>
+    <select id="theme" onchange="switchTheme()">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+      <option value="satellite">Satellite</option>
+      <option value="minimal">Minimal</option>
+    </select>
+  </div>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  background: #002147;
+  color: white;
+  padding: 15px 20px;
+  gap: 15px;
+}
+
+header .logo {
+  height: 60px;
+  width: auto;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* Top Controls Bar */
+.controls {
+  padding: 10px;
+  background: #f4f4f4;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.controls label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.controls input,
+.controls select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.controls input:focus,
+.controls select:focus {
+  outline: none;
+  border-color: #004080;
+  box-shadow: 0 0 5px rgba(0,64,128,0.4);
+}
+
+/* Buttons */
+.btn-primary, .btn-secondary {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #004080;
+  color: white;
+  border: none;
+}
+.btn-primary:hover {
+  background: #0059b3;
+}
+
+.btn-secondary {
+  background: #eaeaea;
+  color: #333;
+  border: 1px solid #ccc;
+}
+.btn-secondary:hover {
+  background: #ddd;
+}
+
+/* Suggestions dropdown */
+#suggestions {
+  position: absolute;
+  top: 120px;
+  left: 20px;
+  background: white;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 200px;
+  z-index: 999;
+}
+#suggestions div {
+  padding: 8px;
+  cursor: pointer;
+}
+#suggestions div:hover {
+  background: #ddd;
+}
+
+/* Map */
+#map {
+  flex-grow: 1;
+  width: 100%;
+}
+
+/* Popup Card Styling */
+.popup-card {
+  text-align: center;
+  max-width: 200px;
+}
+.popup-card img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 5px;
+}
+.popup-card h3 {
+  font-size: 16px;
+  margin: 5px 0;
+}
+.popup-card p {
+  font-size: 13px;
+  color: #555;
+}
+.popup-card button {
+  padding: 6px 10px;
+  margin-top: 8px;
+  background: #002147;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.popup-card button:hover {
+  background: #004080;
+}
