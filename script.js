@@ -3,12 +3,11 @@ const map = L.map("map").setView([26.8518, 81.0503], 17);
 
 // Tile Layers
 const themes = {
-  light: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "© OpenStreetMap" }),
-  dark: L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", { attribution: "© OpenStreetMap & © Carto" }),
-  satellite: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { attribution: "Tiles © Esri" }),
-  minimal: L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", { attribution: "© OpenStreetMap & © Carto" })
+  light: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"),
+  dark: L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"),
+  satellite: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"),
+  minimal: L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png")
 };
-
 themes.light.addTo(map);
 
 // Theme Switcher
@@ -83,10 +82,7 @@ async function getRoute(customSource = null) {
 
       const distanceKm = data.trip.summary.length.toFixed(2);
       const timeMin = Math.round(data.trip.summary.time / 60);
-      L.popup()
-        .setLatLng(destCoords)
-        .setContent(`🚶 ${distanceKm} km<br>⏱ ${timeMin} min`)
-        .openOn(map);
+      L.popup().setLatLng(destCoords).setContent(`🚶 ${distanceKm} km<br>⏱ ${timeMin} min`).openOn(map);
     } else {
       alert("No route found.");
     }
@@ -159,24 +155,16 @@ map.on("locationfound", function (e) {
     userMarker.setLatLng(e.latlng);
   } else {
     userMarker = L.circleMarker(e.latlng, {
-      radius: 8,
-      fillColor: "red",
-      color: "white",
-      weight: 2,
-      opacity: 1,
-      fillOpacity: 0.9
+      radius: 8, fillColor: "red", color: "white",
+      weight: 2, opacity: 1, fillOpacity: 0.9
     }).addTo(map).bindPopup("You are here!");
   }
 
   if (currentRoute) {
-    // Trim already covered route
-    currentRoute = currentRoute.filter(coord =>
-      getDistance(e.latlng, { lat: coord[0], lng: coord[1] }) > 5
-    );
+    currentRoute = currentRoute.filter(coord => getDistance(e.latlng, { lat: coord[0], lng: coord[1] }) > 5);
     if (routeLine) map.removeLayer(routeLine);
     routeLine = L.polyline(currentRoute, { color: "blue", weight: 4 }).addTo(map);
 
-    // If user strays >20m from nearest point, auto recalc
     const nearest = findNearestPoint(e.latlng, currentRoute);
     if (nearest > 20) {
       recalculateRoute();
@@ -204,4 +192,45 @@ function findNearestPoint(loc, route) {
     if (d < minDist) minDist = d;
   });
   return minDist;
+}
+
+// Menu toggle
+document.getElementById("menuToggle").addEventListener("click", () => {
+  document.getElementById("menuDropdown").classList.toggle("show");
+});
+
+// EVENTS FEATURE
+const events = [
+  { time: "09:00 AM", title: "Guest Lecture on AI", location: "Academic Building 3" },
+  { time: "11:30 AM", title: "Workshop: Entrepreneurship", location: "Academic Building 5/Library/Auditorium" },
+  { time: "02:00 PM", title: "Cultural Fest Rehearsals", location: "Mess/Canteen/Hospitality" },
+  { time: "04:00 PM", title: "Sports Meet", location: "Two Wheeler Parking" }
+];
+
+function toggleEvents() {
+  const overlay = document.getElementById("eventsOverlay");
+  const list = document.getElementById("eventsList");
+
+  if (overlay.style.display === "flex") {
+    overlay.style.display = "none";
+  } else {
+    list.innerHTML = "";
+    events.forEach(ev => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${ev.time}</strong> - ${ev.title}<br><em>${ev.location}</em>`;
+      li.onclick = () => {
+        const b = buildings.find(b => b.name.includes(ev.location));
+        if (b) {
+          map.setView([b.lat, b.lon], 18);
+          const markerIdx = buildings.indexOf(b);
+          markers[markerIdx].openPopup();
+          overlay.style.display = "none";
+        } else {
+          alert("Location not found on map.");
+        }
+      };
+      list.appendChild(li);
+    });
+    overlay.style.display = "flex";
+  }
 }

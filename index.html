@@ -11,11 +11,12 @@
   <header>
     <img src="icons/amityLogo.jpeg" alt="Amity Logo" class="logo">
     <h1>Amity University - Lucknow Campus Interactive Map</h1>
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <button id="menuToggle" class="icon-btn">☰ Menu</button>
+    <button id="eventsBtn" class="icon-btn" onclick="toggleEvents()">📅 Events</button>
   </header>
 
   <!-- Dropdown Menu -->
-  <div id="menu" class="menu hidden">
+  <div id="menuDropdown" class="menu-dropdown">
     <input type="text" id="searchBox" placeholder="🔍 Search for a building..." onkeyup="showSuggestions()">
     <div id="suggestions"></div>
 
@@ -37,15 +38,19 @@
     </select>
   </div>
 
+  <!-- Events Overlay -->
+  <div id="eventsOverlay" class="events-overlay">
+    <div class="events-content">
+      <h2>Today's Events</h2>
+      <ul id="eventsList"></ul>
+      <button onclick="toggleEvents()" class="btn-secondary">Close</button>
+    </div>
+  </div>
+
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="data.js"></script>
   <script src="script.js"></script>
-  <script>
-    function toggleMenu() {
-      document.getElementById("menu").classList.toggle("hidden");
-    }
-  </script>
 </body>
 </html>
