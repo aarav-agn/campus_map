@@ -8,60 +8,93 @@ body {
 
 header {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
   background: #002147;
   color: white;
-  padding: 15px 20px;
+  padding: 10px 15px;
   gap: 15px;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 header .logo {
-  height: 60px;
+  height: 50px;
   width: auto;
 }
 
 h1 {
   margin: 0;
   font-size: 18px;
-  flex-grow: 1;
 }
 
-/* Menu Dropdown */
-.menu-dropdown {
-  display: none;
-  flex-direction: column;
-  padding: 15px;
-  background: #f4f4f4;
-  border-bottom: 1px solid #ccc;
-  gap: 10px;
-}
-
-.menu-dropdown.show {
+/* Right side buttons */
+.header-right {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
-.controls label {
+.icon-btn {
+  background: #004080;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin-top: 5px;
+  border-radius: 6px;
+  cursor: pointer;
   font-size: 14px;
   font-weight: 600;
+}
+.icon-btn:hover {
+  background: #0059b3;
+}
+
+/* Dropdown Menu */
+.menu-dropdown {
+  display: none;
+  position: absolute;
+  top: 80px;
+  right: 15px;
+  background: #fff;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  z-index: 1000;
+  width: 250px;
+}
+
+.menu-dropdown label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+  display: block;
   color: #333;
 }
 
 .menu-dropdown input,
 .menu-dropdown select {
+  width: 100%;
   padding: 8px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  margin-top: 5px;
 }
 
 /* Buttons */
-.btn-primary, .btn-secondary, .icon-btn {
+.btn-primary, .btn-secondary {
   padding: 8px 12px;
   font-size: 14px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
 .btn-primary {
@@ -82,24 +115,14 @@ h1 {
   background: #ddd;
 }
 
-.icon-btn {
-  background: #004080;
-  color: white;
-  border: none;
-}
-.icon-btn:hover {
-  background: #0059b3;
-}
-
 /* Suggestions dropdown */
 #suggestions {
-  position: absolute;
   background: white;
   border: 1px solid #ccc;
   max-height: 150px;
   overflow-y: auto;
-  width: 200px;
-  z-index: 999;
+  width: 100%;
+  margin-top: 5px;
 }
 #suggestions div {
   padding: 8px;
@@ -113,6 +136,37 @@ h1 {
 #map {
   flex-grow: 1;
   width: 100%;
+}
+
+/* Popup Card Styling */
+.popup-card {
+  text-align: center;
+  max-width: 200px;
+}
+.popup-card img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 5px;
+}
+.popup-card h3 {
+  font-size: 16px;
+  margin: 5px 0;
+}
+.popup-card p {
+  font-size: 13px;
+  color: #555;
+}
+.popup-card button {
+  padding: 6px 10px;
+  margin-top: 8px;
+  background: #002147;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.popup-card button:hover {
+  background: #004080;
 }
 
 /* Events Overlay */
@@ -146,8 +200,7 @@ h1 {
 .events-content ul li {
   padding: 10px;
   border-bottom: 1px solid #ddd;
-  cursor: pointer;
 }
-.events-content ul li:hover {
-  background: #f4f4f4;
+.events-content ul li:last-child {
+  border-bottom: none;
 }

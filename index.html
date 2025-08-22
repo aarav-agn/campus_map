@@ -9,10 +9,18 @@
 </head>
 <body>
   <header>
-    <img src="icons/amityLogo.jpeg" alt="Amity Logo" class="logo">
-    <h1>Amity University - Lucknow Campus Interactive Map</h1>
-    <button id="menuToggle" class="icon-btn">☰ Menu</button>
-    <button id="eventsBtn" class="icon-btn" onclick="toggleEvents()">📅 Events</button>
+    <div class="header-left">
+      <img src="icons/amityLogo.jpeg" alt="Amity Logo" class="logo">
+      <h1>Amity University - Lucknow Campus Interactive Map</h1>
+    </div>
+
+    <div class="header-right">
+      <!-- Menu Toggle -->
+      <button id="menuToggle" class="icon-btn">☰ Menu</button>
+
+      <!-- Events Button (below menu) -->
+      <button id="eventsBtn" class="icon-btn" onclick="toggleEvents()">📅 Events</button>
+    </div>
   </header>
 
   <!-- Dropdown Menu -->

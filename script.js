@@ -3,10 +3,10 @@ const map = L.map("map").setView([26.8518, 81.0503], 17);
 
 // Tile Layers
 const themes = {
-  light: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"),
-  dark: L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"),
-  satellite: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"),
-  minimal: L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png")
+  light: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "© OpenStreetMap" }),
+  dark: L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", { attribution: "© OpenStreetMap & © Carto" }),
+  satellite: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { attribution: "Tiles © Esri" }),
+  minimal: L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", { attribution: "© OpenStreetMap & © Carto" })
 };
 themes.light.addTo(map);
 
@@ -144,16 +144,15 @@ function selectDestination(idx) {
   getRoute();
 }
 
-// Track user location (red dot)
+// Track user location
 map.locate({ setView: true, watch: true, maxZoom: 18 });
 
 let userMarker = null;
 map.on("locationfound", function (e) {
   userLocation = e.latlng;
 
-  if (userMarker) {
-    userMarker.setLatLng(e.latlng);
-  } else {
+  if (userMarker) userMarker.setLatLng(e.latlng);
+  else {
     userMarker = L.circleMarker(e.latlng, {
       radius: 8, fillColor: "red", color: "white",
       weight: 2, opacity: 1, fillOpacity: 0.9
@@ -184,7 +183,6 @@ function getDistance(a, b) {
   return R * c;
 }
 
-// Find nearest distance to route
 function findNearestPoint(loc, route) {
   let minDist = Infinity;
   route.forEach(coord => {
@@ -194,12 +192,13 @@ function findNearestPoint(loc, route) {
   return minDist;
 }
 
-// Menu toggle
+// Toggle Menu
 document.getElementById("menuToggle").addEventListener("click", () => {
-  document.getElementById("menuDropdown").classList.toggle("show");
+  const menu = document.getElementById("menuDropdown");
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
 });
 
-// EVENTS FEATURE
+// Sample Events
 const events = [
   { time: "09:00 AM", title: "Guest Lecture on AI", location: "Academic Building 3" },
   { time: "11:30 AM", title: "Workshop: Entrepreneurship", location: "Academic Building 5/Library/Auditorium" },
@@ -218,16 +217,13 @@ function toggleEvents() {
     events.forEach(ev => {
       const li = document.createElement("li");
       li.innerHTML = `<strong>${ev.time}</strong> - ${ev.title}<br><em>${ev.location}</em>`;
+      li.style.cursor = "pointer";
       li.onclick = () => {
-        const b = buildings.find(b => b.name.includes(ev.location));
-        if (b) {
-          map.setView([b.lat, b.lon], 18);
-          const markerIdx = buildings.indexOf(b);
-          markers[markerIdx].openPopup();
-          overlay.style.display = "none";
-        } else {
-          alert("Location not found on map.");
+        const match = buildings.find(b => ev.location.includes(b.name));
+        if (match) {
+          map.setView([match.lat, match.lon], 18);
         }
+        overlay.style.display = "none";
       };
       list.appendChild(li);
     });
