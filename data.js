@@ -37,9 +37,9 @@ const buildings = [
     icon: "canteen.png" 
   },
   { 
-    name: "Two Wheeler Parking", 
+    name: "Parking", 
     lat: 26.850548, lon: 81.050796, 
-    info: "Two wheeler parking area", 
+    info: "parking area", 
     icon: "parking.png" 
   }, 
   { 
@@ -73,5 +73,27 @@ const buildings = [
     lat: 26.852108, lon:  81.047988,
     info: "Hostel for freshers", 
     icon: "academic.png" 
+  },
+
+  { 
+    name: "Gate 1",
+    lat: 26.852553,  lon: 81.050710,
+    info: "Main gate of campus ( gate pass to be made here for entrance) ", 
+    icon: "gate.png" 
+  },
+
+
+  { 
+    name: "Gate 2 ",
+    lat: 26.850552,  lon: 81.050810 ,
+    info: "Gate for Parking's Entrance", 
+    icon: "gate.png" 
+  },
+
+  { 
+    name: "Gate 4",
+    lat: 26.849198,  lon:  81.050367,
+    info: "Gate for Academic Block 6", 
+    icon: "gate.png" 
   }
 ];
