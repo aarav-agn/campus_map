@@ -16,13 +16,13 @@ header {
 }
 
 header .logo {
-  height: 60px;
+  height: 50px;
   width: auto;
 }
 
 h1 {
   margin: 0;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 /* Top Controls Bar */
@@ -87,13 +87,13 @@ h1 {
 /* Suggestions dropdown */
 #suggestions {
   position: absolute;
-  top: 120px;
-  left: 20px;
+  top: 140px;
+  left: 10px;
   background: white;
   border: 1px solid #ccc;
   max-height: 150px;
   overflow-y: auto;
-  width: 200px;
+  width: 80%;
   z-index: 999;
 }
 #suggestions div {
@@ -139,4 +139,60 @@ h1 {
 }
 .popup-card button:hover {
   background: #004080;
+}
+
+/* 📱 Mobile-specific tweaks */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px;
+  }
+  header .logo {
+    height: 40px;
+  }
+  h1 {
+    font-size: 18px;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .controls label {
+    font-size: 13px;
+  }
+
+  .controls input,
+  .controls select {
+    width: 100%;
+    font-size: 13px;
+    padding: 6px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  #suggestions {
+    top: auto;
+    left: 5%;
+    width: 90%;
+  }
+
+  .popup-card img {
+    width: 40px;
+    height: 40px;
+  }
+  .popup-card h3 {
+    font-size: 14px;
+  }
+  .popup-card p {
+    font-size: 12px;
+  }
 }
