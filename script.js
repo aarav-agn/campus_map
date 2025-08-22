@@ -8,7 +8,7 @@ const themes = {
   dark: L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", { attribution: "© OpenStreetMap & © Carto" }),
   minimal: L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", { attribution: "© OpenStreetMap & © Carto" })
 };
-themes.light.addTo(map);
+themes.satellite.addTo(map);
 
 // Theme Switcher
 function switchTheme() {
