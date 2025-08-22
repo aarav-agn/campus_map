@@ -154,7 +154,7 @@ map.on("locationfound", function (e) {
   if (userMarker) userMarker.setLatLng(e.latlng);
   else {
     userMarker = L.circleMarker(e.latlng, {
-      radius: 8, fillColor: "red", color: "white",
+      radius: 8, fillColor: "blue", color: "white",
       weight: 2, opacity: 1, fillOpacity: 0.9
     }).addTo(map).bindPopup("You are here!");
   }
@@ -162,7 +162,7 @@ map.on("locationfound", function (e) {
   if (currentRoute) {
     currentRoute = currentRoute.filter(coord => getDistance(e.latlng, { lat: coord[0], lng: coord[1] }) > 5);
     if (routeLine) map.removeLayer(routeLine);
-    routeLine = L.polyline(currentRoute, { color: "blue", weight: 4 }).addTo(map);
+    routeLine = L.polyline(currentRoute, { color: "red", weight: 4 }).addTo(map);
 
     const nearest = findNearestPoint(e.latlng, currentRoute);
     if (nearest > 20) {
