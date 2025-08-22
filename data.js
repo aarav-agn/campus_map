@@ -85,7 +85,7 @@ const buildings = [
 
   { 
     name: "Gate 2 ",
-    lat: 26.850552,  lon: 81.050810 ,
+    lat: 26.850421,   lon: 81.051174,
     info: "Gate for Parking's Entrance", 
     icon: "gate.png" 
   },
