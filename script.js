@@ -41,21 +41,54 @@ buildings.forEach((b, idx) => {
   sourceSelect.add(new Option(b.name, idx));
   destinationSelect.add(new Option(b.name, idx));
 });
+// Add user location option
+const userOption = new Option("📍 Your Location", "user");
+sourceSelect.add(userOption, 0);
 
 let routeLine = null;
 let currentRoute = null;
 let destCoords = null;
 let userLocation = null;
+let lastLocation = null;
 
 // Routing
 async function getRoute(customSource = null) {
   if (routeLine) map.removeLayer(routeLine);
 
-  const src = customSource || buildings[sourceSelect.value];
+  let src;
+  if (customSource) {
+    src = customSource;
+  } else if (sourceSelect.value === "user") {
+    if (!userLocation) {
+      alert("User location not available yet.");
+      return;
+    }
+    src = { lat: userLocation.lat, lon: userLocation.lng };
+  } else {
+    src = buildings[sourceSelect.value];
+  }
+
   const dest = buildings[destinationSelect.value];
   if (!dest) return;
 
   destCoords = [dest.lat, dest.lon];
+
+  // Show temporary "Start" prompt for 5 seconds
+  const promptDiv = document.createElement("div");
+  promptDiv.innerText = "🚦 Start";
+  promptDiv.style.position = "fixed";
+  promptDiv.style.bottom = "20px";
+  promptDiv.style.right = "20px";
+  promptDiv.style.background = "#004080";
+  promptDiv.style.color = "#fff";
+  promptDiv.style.padding = "10px 15px";
+  promptDiv.style.borderRadius = "8px";
+  promptDiv.style.zIndex = 3000;
+  document.body.appendChild(promptDiv);
+  setTimeout(() => promptDiv.remove(), 5000);
+
+  // Close menu automatically
+  document.getElementById("menuDropdown").style.display = "none";
 
   const url = "https://valhalla1.openstreetmap.de/route";
   const body = {
@@ -92,14 +125,10 @@ async function getRoute(customSource = null) {
   }
 }
 
-// Recalculate using user location
+// Recalculate using user location dynamically
 function recalculateRoute() {
-  if (!userLocation) {
-    alert("User location not available yet.");
-    return;
-  }
-  const src = { lat: userLocation.lat, lon: userLocation.lng };
-  getRoute(src);
+  if (!userLocation) return;
+  getRoute({ lat: userLocation.lat, lon: userLocation.lng });
 }
 
 // Decode polyline
@@ -144,30 +173,36 @@ function selectDestination(idx) {
   getRoute();
 }
 
-// Track user location
-map.locate({ setView: true, watch: true, maxZoom: 18 });
+// Track user location with smoothing
+map.locate({ setView: true, watch: true, maxZoom: 18, enableHighAccuracy: true, maximumAge: 1000, timeout: 5000 });
 
 let userMarker = null;
 map.on("locationfound", function (e) {
-  userLocation = e.latlng;
+  const loc = e.latlng;
 
-  if (userMarker) userMarker.setLatLng(e.latlng);
+  if (lastLocation && getDistance(lastLocation, loc) < 3) return;
+  lastLocation = loc;
+  userLocation = loc;
+
+  if (userMarker) userMarker.setLatLng(loc);
   else {
-    userMarker = L.circleMarker(e.latlng, {
+    userMarker = L.circleMarker(loc, {
       radius: 8, fillColor: "blue", color: "white",
       weight: 2, opacity: 1, fillOpacity: 0.9
     }).addTo(map).bindPopup("You are here!");
   }
 
-  if (currentRoute) {
-    currentRoute = currentRoute.filter(coord => getDistance(e.latlng, { lat: coord[0], lng: coord[1] }) > 5);
-    if (routeLine) map.removeLayer(routeLine);
-    routeLine = L.polyline(currentRoute, { color: "red", weight: 4 }).addTo(map);
+  // Set start point to user's location
+  sourceSelect.value = "user";
 
-    const nearest = findNearestPoint(e.latlng, currentRoute);
-    if (nearest > 20) {
-      recalculateRoute();
-    }
+  // Smoothly update red polyline as user moves
+  if (currentRoute && routeLine) {
+    const newRoute = currentRoute.filter(coord => getDistance(loc, { lat: coord[0], lng: coord[1] }) > 2);
+    routeLine.setLatLngs(newRoute);
+    currentRoute = newRoute;
+
+    const nearestDist = findNearestPoint(loc, currentRoute);
+    if (nearestDist > 20) recalculateRoute();
   }
 });
 
