@@ -5,12 +5,7 @@ const buildings = [
     info: "Admission Office / Law and BBA and B.com",
     icon: "academic.png" 
   }, 
-  { 
-    name: "Academic Block 2",
-    lat: 26.851639, lon: 81.049549,
-    info: "Pharmacy and Biotechnology", 
-    icon: "academic.png" 
-  }, 
+ 
   { 
     name: "Academic Block 3", 
     lat: 26.850801, lon: 81.049023,
@@ -64,5 +59,19 @@ const buildings = [
     lat: 26.849061, lon: 81.049860, 
     info: "1st Floor", 
     icon: "academic.png" 
-  } 
+  },
+
+  { 
+    name: "Hostel Block 1 ( girls ) ",
+    lat: 26.852108, lon:  81.048927,
+    info: "Hostel for freshers", 
+    icon: "academic.png" 
+  },
+
+  { 
+    name: "Hostel Block 3 (boys hostel)",
+    lat: 26.852108, lon:  81.047988,
+    info: "Hostel for freshers", 
+    icon: "academic.png" 
+  }
 ];
