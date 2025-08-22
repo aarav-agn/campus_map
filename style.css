@@ -23,8 +23,14 @@ header {
 }
 
 header .logo {
-  height: 50px;
+  height: 90px;
   width: auto;
+}
+
+@media (max-width: 600px) {
+  header .logo {
+    height: 70px;   /* smaller for mobile */
+  }
 }
 
 h1 {
