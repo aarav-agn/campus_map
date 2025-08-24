@@ -50,9 +50,11 @@ let currentRoute = null;
 let destCoords = null;
 let userLocation = null;
 let lastLocation = null;
+let navigating = false; // track navigation state
 
 // Routing
 async function getRoute(customSource = null) {
+  navigating = true;
   if (routeLine) map.removeLayer(routeLine);
 
   let src;
@@ -73,9 +75,9 @@ async function getRoute(customSource = null) {
 
   destCoords = [dest.lat, dest.lon];
 
-  // Show temporary "Start" prompt for 5 seconds
+  // Temporary Start prompt
   const promptDiv = document.createElement("div");
-  promptDiv.innerText = "🚦 Start";
+  promptDiv.innerText = "🚦 Navigation Started";
   promptDiv.style.position = "fixed";
   promptDiv.style.bottom = "20px";
   promptDiv.style.right = "20px";
@@ -87,7 +89,7 @@ async function getRoute(customSource = null) {
   document.body.appendChild(promptDiv);
   setTimeout(() => promptDiv.remove(), 5000);
 
-  // Close menu automatically
+  // Close menu
   document.getElementById("menuDropdown").style.display = "none";
 
   const url = "https://valhalla1.openstreetmap.de/route";
@@ -110,7 +112,7 @@ async function getRoute(customSource = null) {
       const decoded = decode(shape);
 
       currentRoute = decoded;
-      routeLine = L.polyline(decoded, { color: "blue", weight: 4 }).addTo(map);
+      routeLine = L.polyline(decoded, { color: "red", weight: 4 }).addTo(map);
       map.fitBounds(routeLine.getBounds());
 
       const distanceKm = data.trip.summary.length.toFixed(2);
@@ -125,9 +127,33 @@ async function getRoute(customSource = null) {
   }
 }
 
+// Stop Navigation
+function stopNavigation() {
+  navigating = false;
+  if (routeLine) {
+    map.removeLayer(routeLine);
+    routeLine = null;
+  }
+  currentRoute = null;
+  destCoords = null;
+
+  const stopDiv = document.createElement("div");
+  stopDiv.innerText = "⏹ Navigation Stopped";
+  stopDiv.style.position = "fixed";
+  stopDiv.style.bottom = "20px";
+  stopDiv.style.right = "20px";
+  stopDiv.style.background = "#800000";
+  stopDiv.style.color = "#fff";
+  stopDiv.style.padding = "10px 15px";
+  stopDiv.style.borderRadius = "8px";
+  stopDiv.style.zIndex = 3000;
+  document.body.appendChild(stopDiv);
+  setTimeout(() => stopDiv.remove(), 5000);
+}
+
 // Recalculate using user location dynamically
 function recalculateRoute() {
-  if (!userLocation) return;
+  if (!userLocation || !navigating) return;
   getRoute({ lat: userLocation.lat, lon: userLocation.lng });
 }
 
@@ -192,11 +218,8 @@ map.on("locationfound", function (e) {
     }).addTo(map).bindPopup("You are here!");
   }
 
-  // Set start point to user's location
-  sourceSelect.value = "user";
-
-  // Smoothly update red polyline as user moves
-  if (currentRoute && routeLine) {
+  // Auto update only if navigation is active
+  if (navigating && currentRoute && routeLine) {
     const newRoute = currentRoute.filter(coord => getDistance(loc, { lat: coord[0], lng: coord[1] }) > 2);
     routeLine.setLatLngs(newRoute);
     currentRoute = newRoute;
